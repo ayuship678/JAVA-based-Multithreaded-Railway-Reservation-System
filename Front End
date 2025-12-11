@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Reservation System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { text-align: center; }
+        .container { max-width: 600px; margin: auto; }
+        input, button, select { padding: 8px; margin: 5px 0; width: 100%; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Railway Reservation System</h1>
+
+        <h2>Book a Seat</h2>
+        <input type="text" id="bookName" placeholder="Enter your name">
+        <select id="bookSeat">
+            <option value="">Select Seat (1-10)</option>
+            <script>
+                for(let i=1;i<=10;i++){
+                    document.write(`<option value="${i-1}">Seat ${i}</option>`);
+                }
+            </script>
+        </select>
+        <input type="number" id="payment" placeholder="Enter payment amount">
+        <button onclick="bookSeat()">Book Seat</button>
+
+        <h2>Cancel a Seat</h2>
+        <input type="text" id="cancelName" placeholder="Enter your name">
+        <select id="cancelSeat">
+            <option value="">Select Seat (1-10)</option>
+            <script>
+                for(let i=1;i<=10;i++){
+                    document.write(`<option value="${i-1}">Seat ${i}</option>`);
+                }
+            </script>
+        </select>
+        <button onclick="cancelSeat()">Cancel Seat</button>
+
+        <h2>Seat Status</h2>
+        <button onclick="showSeats()">View Seats</button>
+        <table id="seatTable">
+            <thead>
+                <tr>
+                    <th>Seat</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h2>Bookings</h2>
+        <button onclick="showBookings()">View Bookings</button>
+        <ul id="bookingList"></ul>
+    </div>
+
+    <script>
+        // Initialize seats and bookings from localStorage
+        let seats = JSON.parse(localStorage.getItem('seats')) || Array(10).fill(false);
+        let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+
+        function saveToStorage() {
+            localStorage.setItem('seats', JSON.stringify(seats));
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+        }
+
+        function bookSeat() {
+            const name = document.getElementById('bookName').value;
+            const seatNumber = parseInt(document.getElementById('bookSeat').value);
+            const payment = parseFloat(document.getElementById('payment').value);
+
+            if(!name || isNaN(seatNumber) || isNaN(payment) || payment <= 0) {
+                alert('Please fill all booking fields correctly.');
+                return;
+            }
+
+            if(seats[seatNumber]) {
+                alert('Seat already booked!');
+                return;
+            }
+
+            seats[seatNumber] = true;
+            bookings.push({name: name, seat: seatNumber+1});
+            saveToStorage();
+            alert(`${name} successfully booked seat ${seatNumber+1}`);
+            showSeats();
+        }
+
+        function cancelSeat() {
+            const name = document.getElementById('cancelName').value;
+            const seatNumber = parseInt(document.getElementById('cancelSeat').value);
+
+            if(!name || isNaN(seatNumber)) {
+                alert('Please fill all cancellation fields.');
+                return;
+            }
+
+            if(!seats[seatNumber]) {
+                alert('Seat is not booked!');
+                return;
+            }
+
+            seats[seatNumber] = false;
+            bookings = bookings.filter(b => b.seat !== seatNumber+1);
+            saveToStorage();
+            alert(`${name} successfully cancelled seat ${seatNumber+1}`);
+            showSeats();
+        }
+
+        function showSeats() {
+            const tbody = document.querySelector('#seatTable tbody');
+            tbody.innerHTML = '';
+            seats.forEach((s, i) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>Seat ${i+1}</td><td>${s ? 'Booked' : 'Available'}</td>`;
+                tbody.appendChild(row);
+            });
+        }
+
+        function showBookings() {
+            const list = document.getElementById('bookingList');
+            list.innerHTML = '';
+            if(bookings.length === 0) {
+                list.innerHTML = '<li>No bookings found.</li>';
+                return;
+            }
+            bookings.forEach(b => {
+                const li = document.createElement('li');
+                li.textContent = `${b.name} - Seat ${b.seat}`;
+                list.appendChild(li);
+            });
+        }
+
+        // Initial display
+        showSeats();
+        showBookings();
+    </script>
+</body>
+</html>
