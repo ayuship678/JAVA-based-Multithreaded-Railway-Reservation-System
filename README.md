@@ -38,4 +38,4 @@ Run the application:
 
 java RailwayReservationSystem
 
-Project Repository: https://github.com/ayuship678/JAVA-based-Multithreaded-Railway-Reservation-System/blob/main/README.md
+Project Repository: https://github.com/ayuship678/JAVA-based-Multithreaded-Railway-Reservation-System/blob/main/README.md .
