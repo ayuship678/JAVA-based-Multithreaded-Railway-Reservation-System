@@ -1,1 +1,1 @@
-# JAVA-based-Multithreaded-Railway-Reservation-System
+Multi-threaded Railway Reservation System
