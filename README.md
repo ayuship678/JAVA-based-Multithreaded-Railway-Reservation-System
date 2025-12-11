@@ -31,11 +31,11 @@ bookings.txt                       # Booking records (auto-created)
 README.md                          # Project overview and instructions
 
 🚀 How to Run
-Compile the project: https://github.com/ayuship678/JAVA-based-Multithreaded-Railway-Reservation-System/blob/main/README.md
+Compile the project:
 
 javac RailwayReservationSystem.java
 Run the application:
 
 java RailwayReservationSystem
 
-Project Repository: 
+Project Repository: https://github.com/ayuship678/JAVA-based-Multithreaded-Railway-Reservation-System/blob/main/README.md
